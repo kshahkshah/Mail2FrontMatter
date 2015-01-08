@@ -36,6 +36,9 @@ module Mail2FrontMatter
 
       Mailman.config.poll_interval = poll_interval
 
+      # this will prevent shenanigans when daemonized
+      Mailman.config.ignore_stdin  = true
+
       if block_given?
         yield(config)
       else

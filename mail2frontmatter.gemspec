@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["me@kunalashah.com"]
   spec.summary       = %q{Email-to-blog parser which creates YAML FrontMatter}
   spec.description   = spec.summary + %q{. Uses Mailman to poll an account. }
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/whistlerbrk/Mail2FrontMatter"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
@@ -18,8 +18,9 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "activesupport"
   spec.add_dependency "mailman"
+  spec.add_dependency "activesupport"
+  spec.add_dependency "daemons"
 
   spec.add_development_dependency "bundler", "~> 1.7"
   spec.add_development_dependency "rake", "~> 10.0"

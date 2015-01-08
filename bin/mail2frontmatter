@@ -1,6 +1,39 @@
 #!/usr/bin/env ruby
 
+require 'optparse'
 require 'mail2frontmatter'
 
-watcher = Mail2FrontMatter::Watcher.new
+config     = nil
+background = false
+
+OptionParser.new do |opts|
+  opts.banner = "Usage: mail2frontmatter [options]"
+
+  opts.on("-cCONFIG", "--config=CONFIG", "path to configuration file, defaults to ./data/mail2frontmatter.yml") do |file|
+    require 'yaml'
+    config = YAML.load_file(file).symbolize_keys!
+  end
+
+  opts.on("-d", "--daemonize", "detach process and run in the background") do
+    background = true
+  end
+
+  opts.on("-h", "--help", "Prints this help") do
+    puts opts
+    exit
+  end
+end.parse!
+
+watcher = Mail2FrontMatter::Watcher.new(config)
+
+if background
+  require 'daemons'
+  puts "detaching..."
+
+  Daemons.daemonize({ app_name: 'mail2frontmatter', dir_mode: :normal, dir: Dir.pwd })
+else
+  puts "running in foreground..."
+end
+
 watcher.run
+
