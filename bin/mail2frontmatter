@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+require 'mail2frontmatter'
+
+watcher = Mail2FrontMatter::Watcher.new
+watcher.run
