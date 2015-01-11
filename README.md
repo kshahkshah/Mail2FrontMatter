@@ -38,8 +38,8 @@ You can override this by passing ```--config=CONFIG```
 
 Furthermore, when run daemonized ```mail2frontmatter``` assumes it can:
 
-1. write its pidfile to ./tmp/pids/mail2frontmatter.pid
-2. append its log output to ./log/mail2frontmatter.log
+1. write its pidfile to ```./tmp/pids/mail2frontmatter.pid```
+2. append its log output to ```./log/mail2frontmatter.log```
 
 You can override each of these settings as well:
 
@@ -47,7 +47,11 @@ To specify a pidfile location set ```--pid=PIDFILE```
 Note: no pidfile is written when run in the foreground
 
 To specify a log file location set ```--log=LOGFILE```
-The default log file when detached is ./log/mail2frontmatter.log (otherwise its STDOUT)
+The default log file when detached is ```./log/mail2frontmatter.log``` (otherwise its ```STDOUT```)
+
+Finally to stop (```SIGTERM```) the detached process call:
+
+    $ mail2frontmatter -k
 
 ### Basic Configuration
 
