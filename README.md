@@ -24,18 +24,32 @@ And then execute:
 
 ## Usage
 
-The executable ```mail2frontmatter``` will by default look for a configuration file in ```data/mail2frontmatter.yml``` relative to the current directory by default. You can override this by passing a path to a config file like:
+To run in the foreground:
 
-    $ mail2frontmatter -c data/myconfig.yml
+    $ mail2frontmatter
 
-Other Flags
+To detach the process pass the ```-d``` option:
 
+    $ mail2frontmatter -d
 
+```mail2frontmatter``` assumes a configuration file will be present at ```./data/mail2frontmatter.yml```
 
+You can override this by passing ```--config=CONFIG```
 
-Additionally you can daemonize the process by passing the ```-d``` option (TODO)
+Furthermore, when run daemonized ```mail2frontmatter``` assumes it can:
 
-### Configuration
+1. write its pidfile to ./tmp/pids/mail2frontmatter.pid
+2. append its log output to ./log/mail2frontmatter.log
+
+You can override each of these settings as well:
+
+To specify a pidfile location set ```--pid=PIDFILE```
+Note: no pidfile is written when run in the foreground
+
+To specify a log file location set ```--log=LOGFILE```
+The default log file when detached is ./log/mail2frontmatter.log (otherwise its STDOUT)
+
+### Basic Configuration
 
 Your configuration file should by parseable YAML. 
 
@@ -51,7 +65,35 @@ mailman:
   password: yourpassword
 ```
 
-As shown the mailman configuration are the exact options you would pass to that gem.
+As shown the mailman configuration are the exact options you would pass [to that gem](https://github.com/titanous/mailman/blob/master/USER_GUIDE.md).
+
+### Embedded Configuration
+
+Finally, as an alternative to using the executable and configuration you can use the watcher embedded within your own code.
+
+Just instantiate it with an empty hash or with config options, then give it a block. You can directly access the Mailman object here as well. See the example below and look at the gem code for more details.
+
+```ruby
+  require 'mail2frontmatter'
+
+  watcher = Mail2FrontMatter::Watcher.new({}) do |config|
+    config[:mailman] = {
+      server: imap.gmail.com
+      port: 993
+      ssl: true
+      username: youruser@yourdomain.com
+      password: yourpassword
+    }
+
+    @receiver = "foo@bar.com"
+    @senders  = "baz@biz.com"
+
+    ....
+  end
+
+  # run it
+  watcher.run
+```
 
 ## Contributing
 

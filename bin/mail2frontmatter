@@ -26,7 +26,7 @@ OptionParser.new do |opts|
     config = YAML.load_file(config_file).symbolize_keys!
   end
 
-  opts.on("-d", "--daemonize", "detach process and run in the background") do
+  opts.on("-d", "--detach", "detach process and run in the background") do
     options[:background] = true
   end
 
@@ -34,7 +34,7 @@ OptionParser.new do |opts|
     options[:log_file] = log_file
   end
 
-  opts.on("-lPIDFILE", "--pid=PIDFILE", "path to pid file, defaults to ./tmp/pids/mail2frontmatter.pid") do |pid_file|
+  opts.on("-pPIDFILE", "--pid=PIDFILE", "path to pid file, defaults to ./tmp/pids/mail2frontmatter.pid") do |pid_file|
     options[:pid_file] = pid_file
   end
 
@@ -55,15 +55,25 @@ if stop
   pid = File.read(options[:pid_file]).to_i
   puts "stopping (#{pid})... "
 
-  # N.B DOESN'T WAIT..
+  # N.B / TODO - DOESN'T WAIT.. DOESN'T CHECK
   begin
     Process.kill('TERM', pid)
 
-  # CLEAN STALE PID
+    # FUTURE: library intercepts TERM, 
+    # waits to finish processing if it is
+    # or if kill exits dirty.
+
+  # CATCH STALE PID
   rescue Errno::ESRCH
     puts "stale pidfile... cleaning"
+
+  # ALWAYS DELETE PID FILE
+  ensure
     File.delete(options[:pid_file])
+
   end
+
+# TRY TO START
 else
 
   # DAEMONIZE...

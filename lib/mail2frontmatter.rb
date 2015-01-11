@@ -13,7 +13,7 @@ module Mail2FrontMatter
     def initialize(config = nil, &block)
       # load config from file
       if config.is_a?(String)
-        config = YAML.load_file(config).symbolize_keys!
+        config = YAML.load_file(config).deep_symbolize_keys!
 
       # load config from file at default data/mail2frontmatter.yml relative from run directory
       elsif config.is_a?(NilClass)
@@ -21,7 +21,7 @@ module Mail2FrontMatter
         default_config = File.join(Dir.pwd, 'data', 'mail2frontmatter.yml')
 
         if File.exist?(default_config)
-          config = YAML.load_file(default_config).symbolize_keys!
+          config = YAML.load_file(default_config).deep_symbolize_keys!
         else
           raise LoadError, 'no configuration given or found at ./data/mail2frontmatter.yml'
         end
@@ -30,39 +30,31 @@ module Mail2FrontMatter
         raise ArgumentError, 'not a valid configuration type'
       end
 
+      yield(config) if block_given?
+
       mail_protocol = config.delete(:protocol) || :imap
-      poll_interval = config.delete(:interval) || (ENV["RACK_ENV"] == 'development' ? 15 : 60)
+      poll_interval = config.delete(:interval) || 60
 
       @receiver = config.delete(:receiver)
       @senders  = config.delete(:senders)
+      @logger   = Logger.new(config.delete(:log_file))
 
       Mailman.config.poll_interval = poll_interval
+      Mailman.config.ignore_stdin = true
 
-      # this will prevent shenanigans when daemonized
-      Mailman.config.ignore_stdin  = true
-
-      if block_given?
-        yield(config)
-      else
-        Mailman.config.send("#{mail_protocol}=", config)
-      end
-
-      @logger = Logger.new(config.delete(:log_file))
+      Mailman.config.send("#{mail_protocol}=", config[:mailman])
       Mailman.config.logger = @logger
-
     end
 
     def run
       Mailman::Application.run do
         from(@senders).to(@receiver) do
-
           parser = Mail2FrontMatter::Parser.new(message)
           writer = Mail2FrontMatter::Writer.new({ 
             metadata: parser.metadata, 
             content:  parser.body
           })
           writer.write
-
         end
       end
     end
