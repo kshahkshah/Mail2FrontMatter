@@ -1,6 +1,5 @@
 #!/usr/bin/env ruby
 
-require File.join(File.dirname(__FILE__), '..', 'lib', 'mail2frontmatter')
 require 'optparse'
 
 run_dir = Dir.pwd
@@ -44,7 +43,7 @@ OptionParser.new do |opts|
   end
 end.parse!
 
-# TRY AND KILL
+# TRY TO KILL
 if stop
 
   if !File.exist?(options[:pid_file])
@@ -58,6 +57,7 @@ if stop
   # N.B / TODO - DOESN'T WAIT.. DOESN'T CHECK
   begin
     Process.kill('TERM', pid)
+    exit 0
 
     # FUTURE: library intercepts TERM, 
     # waits to finish processing if it is
@@ -73,54 +73,55 @@ if stop
 
   end
 
+end
+
 # TRY TO START
-else
+require File.join(File.dirname(__FILE__), '..', 'lib', 'mail2frontmatter')
 
-  # DAEMONIZE...
-  if options[:background]
+# DAEMONIZE...
+if options[:background]
 
-    # CHECKING ALREADY RUNNING / CHECK STALE
-    if File.exists?(options[:pid_file])
-      pid = File.read(options[:pid_file]).to_i
+  # CHECKING ALREADY RUNNING / CHECK STALE
+  if File.exists?(options[:pid_file])
+    pid = File.read(options[:pid_file]).to_i
 
-      begin
-        Process.kill(0, pid)
-        puts "mail2frontmatter is already running (#{pid})"
-        exit 1
+    begin
+      Process.kill(0, pid)
+      puts "mail2frontmatter is already running (#{pid})"
+      exit 1
 
-      rescue Errno::ESRCH
-        puts "stale pidfile... cleaning"
-        File.delete(options[:pid_file])
-      end
+    rescue Errno::ESRCH
+      puts "stale pidfile... cleaning"
+      File.delete(options[:pid_file])
     end
+  end
 
-    puts "daemonizing..."
+  puts "daemonizing..."
 
-    # SET LOG FILE INTERNAL
-    watcher = Mail2FrontMatter::Watcher.new(config) do |config|
-      if !options[:log_file]
-        config[:log_file] = File.join(run_dir, 'log', 'mail2frontmatter.log')
-      else
-        config[:log_file] = options[:log_file]
-      end
+  # SET LOG FILE INTERNAL
+  watcher = Mail2FrontMatter::Watcher.new(config) do |config|
+    if !options[:log_file]
+      config[:log_file] = File.join(run_dir, 'log', 'mail2frontmatter.log')
+    else
+      config[:log_file] = options[:log_file]
     end
+  end
 
-    # FORK / DETACH
-    runner = fork do
-      File.write(options[:pid_file], Process.pid)
-      watcher.run
-    end
-
-    Process.detach(runner)
-
-  else
-
-    # SET LOG FILE INTERNAL (REDUNDANT)
-    watcher = Mail2FrontMatter::Watcher.new(config) do |config|
-      config[:log_file] = !options[:log_file] ? STDOUT : options[:log_file]
-    end
-
-    # FOREGROUND
+  # FORK / DETACH
+  runner = fork do
+    File.write(options[:pid_file], Process.pid)
     watcher.run
   end
+
+  Process.detach(runner)
+
+else
+
+  # SET LOG FILE INTERNAL (REDUNDANT)
+  watcher = Mail2FrontMatter::Watcher.new(config) do |config|
+    config[:log_file] = !options[:log_file] ? STDOUT : options[:log_file]
+  end
+
+  # FOREGROUND
+  watcher.run
 end
