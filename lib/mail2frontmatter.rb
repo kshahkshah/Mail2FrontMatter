@@ -8,6 +8,8 @@ module Mail2FrontMatter
   class Watcher
     require 'mailman'
 
+    attr_accessor :logger
+
     def initialize(config = nil, &block)
       # load config from file
       if config.is_a?(String)
@@ -44,6 +46,10 @@ module Mail2FrontMatter
       else
         Mailman.config.send("#{mail_protocol}=", config)
       end
+
+      @logger = Logger.new(config.delete(:log_file))
+      Mailman.config.logger = @logger
+
     end
 
     def run

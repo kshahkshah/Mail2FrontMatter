@@ -28,6 +28,11 @@ The executable ```mail2frontmatter``` will by default look for a configuration f
 
     $ mail2frontmatter -c data/myconfig.yml
 
+Other Flags
+
+
+
+
 Additionally you can daemonize the process by passing the ```-d``` option (TODO)
 
 ### Configuration

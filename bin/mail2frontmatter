@@ -1,21 +1,41 @@
 #!/usr/bin/env ruby
 
+require File.join(File.dirname(__FILE__), '..', 'lib', 'mail2frontmatter')
 require 'optparse'
-require 'mail2frontmatter'
 
-config     = nil
-background = false
+run_dir = Dir.pwd
+
+# only run time options, not *configuration* options
+stop = false
+config = nil
+options = {
+  background: false,
+  log_file:   nil,
+  pid_file:   File.join(run_dir, 'tmp', 'pids', 'mail2frontmatter.pid')
+}
 
 OptionParser.new do |opts|
   opts.banner = "Usage: mail2frontmatter [options]"
 
-  opts.on("-cCONFIG", "--config=CONFIG", "path to configuration file, defaults to ./data/mail2frontmatter.yml") do |file|
+  opts.on("-k", "--stop", "stop the running process if any") do
+    stop = true
+  end
+
+  opts.on("-cCONFIG", "--config=CONFIG", "path to configuration file, defaults to ./data/mail2frontmatter.yml") do |config_file|
     require 'yaml'
-    config = YAML.load_file(file).symbolize_keys!
+    config = YAML.load_file(config_file).symbolize_keys!
   end
 
   opts.on("-d", "--daemonize", "detach process and run in the background") do
-    background = true
+    options[:background] = true
+  end
+
+  opts.on("-lLOGFILE", "--log=LOGFILE", "path to log file, defaults to STDOUT in the foreground or ./log/mail2frontmatter.log when daemonized") do |log_file|
+    options[:log_file] = log_file
+  end
+
+  opts.on("-lPIDFILE", "--pid=PIDFILE", "path to pid file, defaults to ./tmp/pids/mail2frontmatter.pid") do |pid_file|
+    options[:pid_file] = pid_file
   end
 
   opts.on("-h", "--help", "Prints this help") do
@@ -24,16 +44,73 @@ OptionParser.new do |opts|
   end
 end.parse!
 
-watcher = Mail2FrontMatter::Watcher.new(config)
+# TRY AND KILL
+if stop
 
-if background
-  require 'daemons'
-  puts "detaching..."
+  if !File.exist?(options[:pid_file])
+    puts "no pidfile! are you sure mail2frontmatter is running?"
+    exit 1
+  end
 
-  Daemons.daemonize({ app_name: 'mail2frontmatter', dir_mode: :normal, dir: Dir.pwd })
+  pid = File.read(options[:pid_file]).to_i
+  puts "stopping (#{pid})... "
+
+  # N.B DOESN'T WAIT..
+  begin
+    Process.kill('TERM', pid)
+
+  # CLEAN STALE PID
+  rescue Errno::ESRCH
+    puts "stale pidfile... cleaning"
+    File.delete(options[:pid_file])
+  end
 else
-  puts "running in foreground..."
+
+  # DAEMONIZE...
+  if options[:background]
+
+    # CHECKING ALREADY RUNNING / CHECK STALE
+    if File.exists?(options[:pid_file])
+      pid = File.read(options[:pid_file]).to_i
+
+      begin
+        Process.kill(0, pid)
+        puts "mail2frontmatter is already running (#{pid})"
+        exit 1
+
+      rescue Errno::ESRCH
+        puts "stale pidfile... cleaning"
+        File.delete(options[:pid_file])
+      end
+    end
+
+    puts "daemonizing..."
+
+    # SET LOG FILE INTERNAL
+    watcher = Mail2FrontMatter::Watcher.new(config) do |config|
+      if !options[:log_file]
+        config[:log_file] = File.join(run_dir, 'log', 'mail2frontmatter.log')
+      else
+        config[:log_file] = options[:log_file]
+      end
+    end
+
+    # FORK / DETACH
+    runner = fork do
+      File.write(options[:pid_file], Process.pid)
+      watcher.run
+    end
+
+    Process.detach(runner)
+
+  else
+
+    # SET LOG FILE INTERNAL (REDUNDANT)
+    watcher = Mail2FrontMatter::Watcher.new(config) do |config|
+      config[:log_file] = !options[:log_file] ? STDOUT : options[:log_file]
+    end
+
+    # FOREGROUND
+    watcher.run
+  end
 end
-
-watcher.run
-
