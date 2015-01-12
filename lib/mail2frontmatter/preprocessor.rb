@@ -10,13 +10,12 @@
 # 
 # example:
 # 
-# class MyPreProcessor
-#   extend Mail2FrontMatter::PreProcessor
-# 
-#   def self.run(metadata, body)
-#     metadata[:subject] = some_transformation(metadata[:subject])
-# 
-#     return metadata, body
+# module Mail2FrontMatter
+#   class MyProcessor < PreProcessor
+#     def self.run(metadata, body)
+#       metadata[:some_field] = some_transformation_of(metadata[:some_field])
+#       return metadata, body
+#     end
 #   end
 # end
 

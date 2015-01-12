@@ -1,5 +1,10 @@
 
-# Writes YAML FrontMatter & Article Content
+# Writes YAML FrontMatter & Article Content in ERB
+# 
+# TODO How do I support other templating solutions here?
+#      Same plugin style as processors?
+#      Is processor and writer doing the same thing?
+# 
 module Mail2FrontMatter
   class Writer
 
@@ -8,17 +13,29 @@ module Mail2FrontMatter
 
     def self.write(metadata, body)
 
-      # TODO FIXME! this is supposed to be configurable!
+      # TODO FIXME!
+      # 
+      # this is supposed to be configurable!
+      # get this value from a module variable!
+      # 
       data_directory = File.join(Dir.pwd, 'source', 'blog')
 
-      # TODO NO NO! this is supposed to happen in a pre-processor!
-      # FINE AS A DEFAULT BUT SHOULDNT HAPPEN HERE
-      filename = [metadata[:received].strftime("%Y-%m-%d"), '-', metadata[:subject].parameterize, '.html.erb'].join
+      # MAPPINGS!
+      # 
+      # Play nice with programs which will read this data
+      # And set sensible defaults as fall throughs
 
-      # TODO/FIXME/QUESTION - questionable inner_html call?
+      # if there is no title set, borrow the subject lines
+      metadata[:title] ||= metadata[:subject]
+
+      # make a sensible standard blog filename unless one is given
+      metadata[:filename] ||= [metadata[:received].strftime("%Y-%m-%d"), '-', metadata[:subject].parameterize, '.html.erb'].join
+
+      # a processor can remove and rearrange nodes, stripping out extraneous html
+      # but there should always be a root body node so we can call #inner_html on it
       data = metadata.to_yaml + "---\n" + body.inner_html
 
-      File.write(File.join(data_directory, filename), data)
+      File.write(File.join(data_directory, metadata[:filename]), data)
     end
 
   end
