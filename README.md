@@ -57,13 +57,13 @@ Your configuration file should by parseable YAML.
 
 ```yaml
 protocol: imap
-receiver: stream@kunalashah.com
-senders:  me@kunalashah.com
+receiver: yourblogemail@yourdomain.com
+senders:  yourpersonal@yourdomain.com
 mailman:
   server: imap.gmail.com
   port: 993
   ssl: true
-  username: youruser@yourdomain.com
+  username: yourblogemail@yourdomain.com
   password: yourpassword
 ```
 
