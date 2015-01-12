@@ -13,7 +13,7 @@ module Mail2FrontMatter
 
       # TODO NO NO! this is supposed to happen in a pre-processor!
       # FINE AS A DEFAULT BUT SHOULDNT HAPPEN HERE
-      filename = [metadata[:received].strftime("%Y-%m-%d"), '-', metadata[:title].parameterize, '.html.erb'].join
+      filename = [metadata[:received].strftime("%Y-%m-%d"), '-', metadata[:subject].parameterize, '.html.erb'].join
 
       # TODO/FIXME/QUESTION - questionable inner_html call?
       data = metadata.to_yaml + "---\n" + body.inner_html

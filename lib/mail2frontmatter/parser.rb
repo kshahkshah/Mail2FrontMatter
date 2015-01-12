@@ -57,7 +57,7 @@ module Mail2FrontMatter
         from:        message[:to].value,
         to:          message[:from].value,
         received:    message.date,
-        title:       message.subject,
+        subject:     message.subject,
         attachments: attachments
       }
 
