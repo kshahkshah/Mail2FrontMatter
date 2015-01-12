@@ -53,6 +53,12 @@ module Mail2FrontMatter
         end
       end
 
+      # convert body immediately to a string, why?
+      # Plugins / pre-processors may wish to manipulate the body
+      # however Nokogiri is strict and won't allow template tags
+      # for obvious good reasons
+      @body = @body.inner_html
+
       @metadata = {
         from:        message[:to].value,
         to:          message[:from].value,
