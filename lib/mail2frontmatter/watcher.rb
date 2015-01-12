@@ -2,6 +2,8 @@
 # configures and runs Mailman
 module Mail2FrontMatter
   require 'mailman'
+  require 'byebug'
+  require 'active_support/inflector'
 
   class Watcher
 
@@ -29,6 +31,19 @@ module Mail2FrontMatter
 
       yield(config) if block_given?
 
+      preprocessors = config.delete(:preprocessors) || []
+      preprocessors.each do |processor|
+
+        begin
+          require "mail2frontmatter/#{processor[:key]}"
+        rescue LoadError => e
+          puts "could not require specified preprocessor '#{processor[:key]}.rb', no such file in load path. Check your configuration and try again \n\n"
+          raise e
+        end
+
+        klass = "Mail2FrontMatter::#{processor[:key].underscore.classify}".constantize.register(processor[:options])
+      end
+
       mail_protocol = config.delete(:protocol) || :imap
       poll_interval = config.delete(:interval) || 60
 
@@ -46,11 +61,13 @@ module Mail2FrontMatter
     def run
       Mailman::Application.run do
         from(@senders).to(@receiver) do
+          logger = Mailman.config.logger
+
           logger.info('parsing message...')
-          metadata, body = Mail2FrontMatter::Parser.new(message)
+          parser = Mail2FrontMatter::Parser.new(message)
 
           logger.info('processing body and attachments...')
-          metadata, body = Mail2FrontMatter::PreProcessors.run(metadata, body)
+          metadata, body = Mail2FrontMatter::PreProcessor.process(parser.metadata, parser.body)
 
           logger.info('saving processed post...')
           Mail2FrontMatter::Writer.write(metadata, body)

@@ -16,11 +16,11 @@ module Mail2FrontMatter
     def initialize(message)
       @message = message
       raw_parsed_html = Nokogiri::HTML.parse(@message.html_part.body.raw_source.strip)
-      parsed_html = raw_parsed_html.at("body")
+      @body = raw_parsed_html.at("body")
 
       # remove extraneous nesting
-      while(parsed_html.children.count == 1 && parsed_html.children.first.name == "div") do
-        parsed_html = parsed_html.children.first
+      while(@body.children.count == 1 && @body.children.first.name == "div") do
+        @body = @body.children.first
       end
 
       attachments = {}
@@ -48,18 +48,18 @@ module Mail2FrontMatter
         # file type not allowed
         else
           # remove cooresponding node from html
-          parsed_html.xpath("//*[@src='cid:#{attachment.content_id}']").remove
+          @body.xpath("//*[@src='cid:#{attachment.content_id}']").remove
 
         end
       end
 
-      return {
+      @metadata = {
         from:        message[:to].value,
         to:          message[:from].value,
         received:    message.date,
         title:       message.subject,
         attachments: attachments
-      }, parsed_html
+      }
 
     end
   end
