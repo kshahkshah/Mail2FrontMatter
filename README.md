@@ -1,7 +1,5 @@
 # Mail2FrontMatter
 
-Under development!
-
 Email-to-blog parser which creates YAML FrontMatter and saves your attachments.
 
 Designed to be used with either Middleman or Jekyll
@@ -106,3 +104,8 @@ Just instantiate it with an empty hash or with config options, then give it a bl
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create a new Pull Request
+
+### TODO
+
+* Mail2FrontMatter::Watcher handles both configuration for the whole shebang as well as Mailman. Should be split
+* Some options intended to be configurable (media directory, etc) are not yet and essentially mean you can only run this from a middleman directory installation atm.
