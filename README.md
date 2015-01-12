@@ -107,5 +107,6 @@ Just instantiate it with an empty hash or with config options, then give it a bl
 
 ### TODO
 
+* White list sanitization!
 * Mail2FrontMatter::Watcher handles both configuration for the whole shebang as well as Mailman. Should be split
 * Some options intended to be configurable (media directory, etc) are not yet and essentially mean you can only run this from a middleman directory installation atm.
