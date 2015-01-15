@@ -67,6 +67,10 @@ if stop
   rescue Errno::ESRCH
     puts "stale pidfile... cleaning"
 
+    # also exit here! but don't move exit 0 to ensure block
+    # because "in the future" we may intelligently intercept pkill above
+    exit 0
+
   # ALWAYS DELETE PID FILE
   ensure
     File.delete(options[:pid_file])
