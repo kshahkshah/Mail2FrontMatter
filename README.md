@@ -24,11 +24,11 @@ And then execute:
 
 To run in the foreground:
 
-    $ mail2frontmatter
+    $ bundle exec mail2frontmatter
 
 To detach the process pass the ```-d``` option:
 
-    $ mail2frontmatter -d
+    $ bundle exec mail2frontmatter -d
 
 ```mail2frontmatter``` assumes a configuration file will be present at ```./data/mail2frontmatter.yml```
 
