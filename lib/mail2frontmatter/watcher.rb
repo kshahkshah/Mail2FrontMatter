@@ -2,7 +2,6 @@
 # configures and runs Mailman
 module Mail2FrontMatter
   require 'mailman'
-  require 'byebug'
   require 'active_support/inflector'
 
   class Watcher

@@ -1,3 +1,3 @@
 module Mail2FrontMatter
-  VERSION = "0.0.2"
+  VERSION = "0.0.3"
 end
