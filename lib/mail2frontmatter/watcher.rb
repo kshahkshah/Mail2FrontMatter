@@ -40,7 +40,7 @@ module Mail2FrontMatter
           raise e
         end
 
-        klass = "Mail2FrontMatter::#{processor[:key].underscore.classify}".constantize.register(processor[:options])
+        klass = "Mail2FrontMatter::#{processor[:key].underscore.classify}".constantize.register(processor[:options] || {})
       end
 
       mail_protocol = config.delete(:protocol) || :imap

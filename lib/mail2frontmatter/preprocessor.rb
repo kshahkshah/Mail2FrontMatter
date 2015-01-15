@@ -11,6 +11,7 @@ module Mail2FrontMatter
 
     def self.register(options = {})
       raise InvalidProcessor, "run method not defined on #{self}" if !self.respond_to?(:run)
+      raise ArgumentError, "options must be a hash" unless options.is_a? Hash
       @options = options
 
       @@processors << self
