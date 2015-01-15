@@ -60,8 +60,8 @@ module Mail2FrontMatter
       @body = @body.inner_html
 
       @metadata = {
-        from:        message[:to].value,
-        to:          message[:from].value,
+        from:        message[:from].value,
+        to:          message[:to].value,
         received:    message.date,
         subject:     message.subject,
         attachments: attachments
