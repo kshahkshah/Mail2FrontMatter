@@ -1,23 +1,5 @@
 
 # Pre-processes blog data, allows hooks
-# 
-# 
-# Build a Pre-Processor that accepts two arguments
-# metadata, a symbolized hash of metadata extracted from the email
-# and body, a Nokogiri parsed representation of the email
-# 
-# modify as necessary and as atomically as possible and return two arguments
-# 
-# example:
-# 
-# module Mail2FrontMatter
-#   class MyProcessor < PreProcessor
-#     def self.run(metadata, body)
-#       metadata[:some_field] = some_transformation_of(metadata[:some_field])
-#       return metadata, body
-#     end
-#   end
-# end
 
 module Mail2FrontMatter
   class PreProcessor

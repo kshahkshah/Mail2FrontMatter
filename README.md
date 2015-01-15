@@ -71,9 +71,9 @@ As shown the mailman configuration are the exact options you would pass [to that
 
 ### Embedded Configuration
 
-Finally, as an alternative to using the executable and configuration you can use the watcher embedded within your own code.
+As an alternative to using the executable, you may wish to run the watcher (a wrapper around Mailman) embedded within your own code. This may be useful if you are already running Mailman and don't want to spare the resources or if you need to custom configure Mailman.
 
-Just instantiate it with an empty hash or with config options, then give it a block. You can directly access the Mailman object here as well. See the example below and look at the gem code for more details.
+Instantiate ```Mail2FrontMatter::Watcher``` and pass it a configuration hash (or keep it empty). The constructor takes a block in which you can directly access the Mailman object as well. See the example below or check out the gem's code directly.
 
 ```ruby
   require 'mail2frontmatter'
@@ -87,8 +87,8 @@ Just instantiate it with an empty hash or with config options, then give it a bl
       password: yourpassword
     }
 
-    @receiver = "foo@bar.com"
-    @senders  = "baz@biz.com"
+    config[:receiver] = "yourblog@yourdomain.com"
+    config[:senders] = "youruser@yourdomain.com"
 
     ....
   end
@@ -96,6 +96,27 @@ Just instantiate it with an empty hash or with config options, then give it a bl
   # run it
   watcher.run
 ```
+
+### Extending It
+
+Finally you can extend Mail2FrontMatter to further process incoming emails by subclassing ```Mail2FrontMatter::PreProcessor``` and registering it.
+
+for example:
+
+```ruby
+module Mail2FrontMatter
+  class MyProcessor < PreProcessor
+    def self.run(metadata, body)
+      metadata[:some_field] = some_transformation_of(metadata[:some_field])
+      return metadata, body
+    end
+  end
+end
+
+Mail2FrontMatter::MyProcessor.register
+```
+
+You should always always return metadata and body as shown since this will be passed onto other processors in the chain.
 
 ## Contributing
 
