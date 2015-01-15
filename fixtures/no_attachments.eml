@@ -1,0 +1,61 @@
+                                                                                                                                                                                                                                                               
+Delivered-To: stream@kunalashah.com
+Received: by 10.216.42.73 with SMTP id i51csp1168497web;
+        Mon, 12 Jan 2015 16:14:52 -0800 (PST)
+X-Received: by 10.170.120.195 with SMTP id m186mr27431216ykb.27.1421108091508;
+        Mon, 12 Jan 2015 16:14:51 -0800 (PST)
+Return-Path: <me@kunalashah.com>
+Received: from mail-yk0-x229.google.com (mail-yk0-x229.google.com. [2607:f8b0:4002:c07::229])
+        by mx.google.com with ESMTPS id t25si5238386yhg.25.2015.01.12.16.14.50
+        for <stream@kunalashah.com>
+        (version=TLSv1 cipher=ECDHE-RSA-RC4-SHA bits=128/128);
+        Mon, 12 Jan 2015 16:14:51 -0800 (PST)
+Received-SPF: none (google.com: me@kunalashah.com does not designate permitted sender hosts) client-ip=2607:f8b0:4002:c07::229;
+Authentication-Results: mx.google.com;
+       spf=none (google.com: me@kunalashah.com does not designate permitted sender hosts) smtp.mail=me@kunalashah.com;
+       dkim=pass header.i=@kunalashah.com
+Received: by mail-yk0-f169.google.com with SMTP id 79so21939ykr.0
+        for <stream@kunalashah.com>; Mon, 12 Jan 2015 16:14:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kunalashah.com; s=google;
+        h=mime-version:date:message-id:subject:from:to:content-type;
+        bh=hya9e//LW4XQ2bkKvEYKS38O0pdjqIhxVUGoAex/w5M=;
+        b=fVomZxRYAjkkH3p498EkXyvZiO6Z5WPwEuFzlMyJGTOCFJMzANfJ4vkl8P/LFpzHz4
+         Ql2q1s/nbLRdBKANbHNh442okwVIy/shBjFT1uRt0LQ5n0CiIjz5SbE6BSdEnp6eSDtQ
+         oQE3yqJnkf/X4yC0If2HawkZ98hjfz2TKDths=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20130820;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to
+         :content-type;
+        bh=hya9e//LW4XQ2bkKvEYKS38O0pdjqIhxVUGoAex/w5M=;
+        b=iOD7ofc0a5kQhf/lZnJC9kXIXBPzlWH6eKog61pofebqNJfSLZHkw4jC2A9Y19VjuY
+         jpb4l247HJC3F1aYWCBeetUeoE/XOblN5A8/jygSXvpCIJTgTOH/Udgz4kxRjae01FOY
+         bPxGinme7Nln+MMSGVq/7KGqPYRopTj7zcO0aOsiegQgVqSshml6umHTSJS21QGWDgZS
+         XWUMukc4JlcZscLFKP9EEQjvCEPmEI32L0KR/kcvQLcJsz5QAFQfbPhm7tSzPXuuY/1/
+         Wot5+1NRK9XFAjXF9X6NUNixNAFzo6qsCM8FUoFgbCjo7+E85VY0Y5lixNLkn5h9rOeB
+         677w==
+X-Gm-Message-State: ALoCoQmw5gttL+2jOT4D8w/7c3QySWp8/TW1ZlM0yazuZFLm5Fmc3/nyHioSBE2ud1EuPPdlKCoo
+MIME-Version: 1.0
+X-Received: by 10.170.95.7 with SMTP id m7mr28078171yka.67.1421108090560; Mon,
+ 12 Jan 2015 16:14:50 -0800 (PST)
+Received: by 10.170.205.16 with HTTP; Mon, 12 Jan 2015 16:14:50 -0800 (PST)
+X-Originating-IP: [66.108.230.254]
+Received: by 10.170.205.16 with HTTP; Mon, 12 Jan 2015 16:14:50 -0800 (PST)
+Date: Mon, 12 Jan 2015 19:14:50 -0500
+Message-ID: <CAN-VoWnLrcfGJ6kdEK-Ba2B3ENE6h2OpRMRF91svJVMb3U5fNA@mail.gmail.com>
+Subject: [thoughts] the earth is the best manufacturer we have
+From: Kunal Shah <me@kunalashah.com>
+To: stream@kunalashah.com
+Content-Type: multipart/alternative; boundary=001a113aba9cecfbdc050c7d82bb
+
+--001a113aba9cecfbdc050c7d82bb
+Content-Type: text/plain; charset=UTF-8
+
+vv
+
+--001a113aba9cecfbdc050c7d82bb
+Content-Type: text/html; charset=UTF-8
+
+<p dir="ltr">vv</p>
+
+--001a113aba9cecfbdc050c7d82bb--
