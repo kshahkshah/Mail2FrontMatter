@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'byebug'
 
 describe Mail2FrontMatter::Parser, "parsing" do
 
