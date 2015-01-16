@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/whistlerbrk/Mail2FrontMatter.svg?branch=master)](https://travis-ci.org/whistlerbrk/Mail2FrontMatter)
+
 # Mail2FrontMatter
 
 Email-to-blog parser which creates YAML FrontMatter and saves your attachments.
