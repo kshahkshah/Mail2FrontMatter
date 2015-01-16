@@ -118,6 +118,16 @@ Mail2FrontMatter::MyProcessor.register
 
 You should always always return metadata and body as shown since this will be passed onto other processors in the chain.
 
+### Plugins
+
+If you've released a plugin of your own and would like to add it to this list, please send me a pull request.
+
+[AutoTagSubject](https://github.com/whistlerbrk/m2fm-autotag-subject) - extracts tags from your subject line
+
+[AutomaticEmbeds](https://github.com/whistlerbrk/m2fm-automatic-embeds) - automatically converts links into embeds (e.g. youtube, soundcloud, vimeo, gist)
+
+[AutomaticClowncar](https://github.com/whistlerbrk/m2fm-automatic-clowncar) - makes your incoming image attachments automatic-clowncar compatible (requires Middleman)
+
 ## Contributing
 
 1. Fork it ( https://github.com/whistlerbrk/mail2frontmatter/fork )
@@ -128,6 +138,7 @@ You should always always return metadata and body as shown since this will be pa
 
 ### TODO
 
-* White list sanitization!
+* White list sanitization by default
+* Full Jekyll support - PLEASE send pull requests, I want to support Jekyll as well, hence the general project name
 * Mail2FrontMatter::Watcher handles both configuration for the whole shebang as well as Mailman. Should be split
 * Some options intended to be configurable (media directory, etc) are not yet and essentially mean you can only run this from a middleman directory installation atm.
