@@ -97,11 +97,19 @@ Instantiate ```Mail2FrontMatter::Watcher``` and pass it a configuration hash (or
   watcher.run
 ```
 
+### Plugins
+
+If you've released a plugin of your own and would like to add it to this list, please send me a pull request.
+
+[AutoTagSubject](https://github.com/whistlerbrk/m2fm-autotag-subject) - extracts tags from your subject line
+
+[AutomaticEmbeds](https://github.com/whistlerbrk/m2fm-automatic-embeds) - automatically converts links into embeds (e.g. youtube, soundcloud, vimeo, gist)
+
+[AutomaticClowncar](https://github.com/whistlerbrk/m2fm-automatic-clowncar) - makes your incoming image attachments automatic-clowncar compatible (requires Middleman)
+
 ### Extending It
 
-Finally you can extend Mail2FrontMatter to further process incoming emails by subclassing ```Mail2FrontMatter::PreProcessor``` and registering it.
-
-for example:
+Finally you can extend Mail2FrontMatter to further process incoming emails by subclassing ```Mail2FrontMatter::PreProcessor``` and registering it. The plugins above all implement the pattern shown.
 
 ```ruby
 module Mail2FrontMatter
@@ -117,16 +125,6 @@ Mail2FrontMatter::MyProcessor.register
 ```
 
 You should always always return metadata and body as shown since this will be passed onto other processors in the chain.
-
-### Plugins
-
-If you've released a plugin of your own and would like to add it to this list, please send me a pull request.
-
-[AutoTagSubject](https://github.com/whistlerbrk/m2fm-autotag-subject) - extracts tags from your subject line
-
-[AutomaticEmbeds](https://github.com/whistlerbrk/m2fm-automatic-embeds) - automatically converts links into embeds (e.g. youtube, soundcloud, vimeo, gist)
-
-[AutomaticClowncar](https://github.com/whistlerbrk/m2fm-automatic-clowncar) - makes your incoming image attachments automatic-clowncar compatible (requires Middleman)
 
 ## Contributing
 
