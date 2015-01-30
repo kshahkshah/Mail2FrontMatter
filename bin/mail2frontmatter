@@ -41,6 +41,11 @@ OptionParser.new do |opts|
     puts opts
     exit
   end
+
+  opts.on_tail("-v", "--version", "Prints version") do
+    puts Mail2FrontMatter::VERSION
+    exit
+  end
 end.parse!
 
 # TRY TO KILL
