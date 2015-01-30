@@ -15,7 +15,8 @@ module Mail2FrontMatter
 
     def initialize(message)
       @message = message
-      raw_parsed_html = Nokogiri::HTML.parse(@message.html_part.body.raw_source.strip)
+      raw_parsed_html = Nokogiri::HTML.parse(@message.html_part.decoded.strip)
+
       @body = raw_parsed_html.at("body")
 
       # remove extraneous nesting
