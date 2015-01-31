@@ -11,32 +11,33 @@ describe Mail2FrontMatter::Parser, "parsing" do
   end
 
   it "should return an html body as a string" do
-    Mail2FrontMatter::Parser.new(message_one).body.should match(/Charlie<br>/)
+    body = Mail2FrontMatter::Parser.new(message_one).body
+    expect(body).to match(/Charlie<br>/)
   end
 
   it "should return have an email metadata hash with a from key" do
     from = Mail2FrontMatter::Parser.new(message_one).metadata[:from]
-    from.should eq("Kunal Shah <kunalashokshah@gmail.com>")
+    expect(from).to eq("Kunal Shah <kunalashokshah@gmail.com>")
   end
 
   it "should return have an email metadata hash with a to key" do
     to = Mail2FrontMatter::Parser.new(message_one).metadata[:to]
-    to.should eq("stream@kunalashah.com")
+    expect(to).to eq("stream@kunalashah.com")
   end
 
   it "should return have an email metadata hash with a received key" do
     received = Mail2FrontMatter::Parser.new(message_one).metadata[:received]
-    received.class.should eq(DateTime)
+    expect(received.class).to eq(DateTime)
   end
 
   it "should return have an email metadata hash with a subject key" do
     subject = Mail2FrontMatter::Parser.new(message_one).metadata[:subject]
-    subject.should eq("295 Abandoned Elevator Shaft")
+    expect(subject).to eq("295 Abandoned Elevator Shaft")
   end
 
   it "should save attachments to disk" do
     attachment_path = Mail2FrontMatter::Parser.new(message_one).metadata[:attachments].first[1][:filepath]
-    File.exist?(attachment_path).should eq(true)
+    expect(File.exist?(attachment_path)).to eq(true)
   end
 
 end
