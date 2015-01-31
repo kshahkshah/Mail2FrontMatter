@@ -43,6 +43,7 @@ OptionParser.new do |opts|
   end
 
   opts.on_tail("-v", "--version", "Prints version") do
+    require File.join(File.dirname(__FILE__), '..', 'lib', 'mail2frontmatter', 'version')
     puts Mail2FrontMatter::VERSION
     exit
   end
