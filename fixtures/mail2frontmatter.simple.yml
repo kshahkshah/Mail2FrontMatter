@@ -1,0 +1,11 @@
+protocol: imap
+receiver: 'receiver@example.com'
+senders:  'sender@example.com'
+interval: 20
+
+mailman:
+  server: 'imap.gmail.com'
+  port: 993
+  ssl: true
+  username: 'receiver@example.com'
+  password: 'supersecurepassword'

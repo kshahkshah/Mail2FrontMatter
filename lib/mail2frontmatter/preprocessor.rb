@@ -9,6 +9,10 @@ module Mail2FrontMatter
 
     @@processors = Set.new
 
+    def self.processors
+      @@processors
+    end
+
     def self.register(options = {})
       raise InvalidProcessor, "run method not defined on #{self}" if !self.respond_to?(:run)
       raise ArgumentError, "options must be a hash" unless options.is_a? Hash
@@ -19,7 +23,12 @@ module Mail2FrontMatter
 
     def self.process(metadata, body)
       @@processors.each do |processor|
-        metadata, body = processor.run(metadata, body)
+        begin
+          metadata, body = processor.run(metadata, body)
+        rescue StandardError => e
+          Mail2FrontMatter.logger.error("processor failed!")
+          Mail2FrontMatter.logger.error(e)
+        end
       end
 
       return metadata, body

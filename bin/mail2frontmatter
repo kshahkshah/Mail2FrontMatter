@@ -9,7 +9,6 @@ stop = false
 config = nil
 options = {
   background: false,
-  log_file:   nil,
   pid_file:   File.join(run_dir, 'tmp', 'pids', 'mail2frontmatter.pid')
 }
 
@@ -21,8 +20,7 @@ OptionParser.new do |opts|
   end
 
   opts.on("-cCONFIG", "--config=CONFIG", "path to configuration file, defaults to ./data/mail2frontmatter.yml") do |config_file|
-    require 'yaml'
-    config = YAML.load_file(config_file).symbolize_keys!
+    config = config_file
   end
 
   opts.on("-d", "--detach", "detach process and run in the background") do
@@ -30,7 +28,7 @@ OptionParser.new do |opts|
   end
 
   opts.on("-lLOGFILE", "--log=LOGFILE", "path to log file, defaults to STDOUT in the foreground or ./log/mail2frontmatter.log when daemonized") do |log_file|
-    options[:log_file] = log_file
+    config[:log_file] = log_file
   end
 
   opts.on("-pPIDFILE", "--pid=PIDFILE", "path to pid file, defaults to ./tmp/pids/mail2frontmatter.pid") do |pid_file|
@@ -108,30 +106,22 @@ if options[:background]
 
   puts "daemonizing..."
 
-  # SET LOG FILE INTERNAL
-  watcher = Mail2FrontMatter::Watcher.new(config) do |config|
-    if !options[:log_file]
-      config[:log_file] = File.join(run_dir, 'log', 'mail2frontmatter.log')
-    else
-      config[:log_file] = options[:log_file]
-    end
-  end
+  # SET CONFIG...
+  Mail2FrontMatter.set_config(config)
 
   # FORK / DETACH
   runner = fork do
     File.write(options[:pid_file], Process.pid)
-    watcher.run
+    Mail2FrontMatter::Watcher.run
   end
 
   Process.detach(runner)
 
 else
 
-  # SET LOG FILE INTERNAL (REDUNDANT)
-  watcher = Mail2FrontMatter::Watcher.new(config) do |config|
-    config[:log_file] = !options[:log_file] ? STDOUT : options[:log_file]
-  end
+  # SET CONFIG...
+  Mail2FrontMatter.set_config(config)
 
   # FOREGROUND
-  watcher.run
+  Mail2FrontMatter::Watcher.run
 end

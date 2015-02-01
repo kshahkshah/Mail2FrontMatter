@@ -1,0 +1,15 @@
+protocol: imap
+receiver: 'receiver@example.com'
+senders:  'sender@example.com'
+interval: 20
+
+preprocessors:
+  - key: 'broken-processor'
+  - key: 'fake-processor'
+
+mailman:
+  server: 'imap.gmail.com'
+  port: 993
+  ssl: true
+  username: 'receiver@example.com'
+  password: 'supersecurepassword'
