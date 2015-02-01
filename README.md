@@ -71,6 +71,17 @@ mailman:
 
 As shown the mailman configuration are the exact options you would pass [to that gem](https://github.com/titanous/mailman/blob/master/USER_GUIDE.md).
 
+There are more configuration options available, most importantly which directory mail2frontmatter will write your blog's ERB/FrontMatter to and which directory it will save attachments. If you are using Middleman and running the executable from your Middleman directory, you likely do not need to set these explicitly.
+
+```yaml
+data_directory:  /home/deploy/yoursite/source/blog
+media_directory: /home/deploy/yoursite/source
+```
+
+media_directory is a base, it will create an images, audio, and videos directory if one does not exist and save attachments there accordingly.
+
+Again, if you are using Middleman, the defaults should work for you.
+
 ### Embedded Configuration
 
 As an alternative to using the executable, you may wish to run the watcher (a wrapper around Mailman) embedded within your own code. This may be useful if, for example, you are already running Mailman and don't want to spare the resources or if you need to custom configure Mailman.
