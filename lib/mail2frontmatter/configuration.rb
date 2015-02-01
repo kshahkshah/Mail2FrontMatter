@@ -34,22 +34,45 @@ module Mail2FrontMatter
         raise ArgumentError, 'not a valid configuration type'
       end
 
-      # SET LOG FILE, explicitly
+      # setup logger, use provided location
       if @config[:log_file]
         @logger = Logger.new(@config[:log_file])
 
-      # OR USE SOME SENSIBLE DEFAULTS
+      # or a sensible default if non was provided
       elsif Dir.exist?(File.join(Dir.pwd, 'log'))
         @logger = Logger.new(File.join(Dir.pwd, 'log', 'mail2frontmatter.log'))
 
+      # finally fallback onto STDOUT
       else
         @logger = Logger.new(STDOUT)
+      end
 
+      # set default for data directory unless already specified
+      # the data directory is where the posts will be written to
+      unless @config[:data_directory]
+        # TODO
+        # if middleman?
+        @config[:data_directory] = File.join(Dir.pwd, 'source', 'blog')
+        # elsif jekyll?
+        # else
+        # end
+      end
+
+      # set default for media directory unless already specified
+      # the media directory is where the attachments will be saved to
+      unless @config[:media_directory]
+        # TODO
+        # if middleman?
+        @config[:media_directory] = File.join(Dir.pwd, 'source')
+        # elsif jekyll?
+        # else
+        # end
       end
 
       # now we yield the config object in case the user would like to overwrite any defaults
       yield(@config) if block_given?
 
+      # finally, if pre-processors were specified, we can try requiring them
       preprocessors = @config[:preprocessors] || []
 
       preprocessors.each do |processor|

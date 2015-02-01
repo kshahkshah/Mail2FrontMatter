@@ -73,14 +73,14 @@ As shown the mailman configuration are the exact options you would pass [to that
 
 ### Embedded Configuration
 
-As an alternative to using the executable, you may wish to run the watcher (a wrapper around Mailman) embedded within your own code. This may be useful if you are already running Mailman and don't want to spare the resources or if you need to custom configure Mailman.
+As an alternative to using the executable, you may wish to run the watcher (a wrapper around Mailman) embedded within your own code. This may be useful if, for example, you are already running Mailman and don't want to spare the resources or if you need to custom configure Mailman.
 
-Instantiate ```Mail2FrontMatter::Watcher``` and pass it a configuration hash (or keep it empty). The constructor takes a block in which you can directly access the Mailman object as well. See the example below or check out the gem's code directly.
+Set ```Mail2FrontMatter```'s config by passing it a hash of options (or keep it empty). The constructor also takes a block as shown below. Check out the gem's code for more details.
 
 ```ruby
   require 'mail2frontmatter'
 
-  watcher = Mail2FrontMatter::Watcher.new({}) do |config|
+  Mail2FrontMatter.set_config({}) do |config|
     config[:mailman] = {
       server: imap.gmail.com
       port: 993
@@ -90,13 +90,11 @@ Instantiate ```Mail2FrontMatter::Watcher``` and pass it a configuration hash (or
     }
 
     config[:receiver] = "yourblog@yourdomain.com"
-    config[:senders] = "youruser@yourdomain.com"
-
-    ....
+    config[:senders]  = "youruser@yourdomain.com"
   end
 
   # run it
-  watcher.run
+  Mail2FrontMatter::Watcher.run
 ```
 
 ### Plugins
@@ -139,6 +137,5 @@ You should always always return metadata and body as shown since this will be pa
 ### TODO
 
 * White list sanitization by default
-* Full Jekyll support - PLEASE send pull requests, I want to support Jekyll as well, hence the general project name
-* Mail2FrontMatter::Watcher handles both configuration for the whole shebang as well as Mailman. Should be split
-* Some options intended to be configurable (media directory, etc) are not yet and essentially mean you can only run this from a middleman directory installation atm.
+* defaults for Jekyll out of the box
+

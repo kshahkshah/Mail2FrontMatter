@@ -13,14 +13,6 @@ module Mail2FrontMatter
     require 'active_support/inflector'
 
     def self.write(metadata, body)
-
-      # TODO FIXME!
-      # 
-      # this is supposed to be configurable!
-      # get this value from a module variable!
-      # 
-      data_directory = File.join(Dir.pwd, 'source', 'blog')
-
       # MAPPINGS!
       # 
       # Play nice with programs which will read this data
@@ -34,7 +26,7 @@ module Mail2FrontMatter
 
       data = metadata.to_yaml + "---\n" + body
 
-      File.write(File.join(data_directory, metadata[:filename]), data)
+      File.write(File.join(Mail2FrontMatter.config[:data_directory], metadata[:filename]), data)
     end
 
   end

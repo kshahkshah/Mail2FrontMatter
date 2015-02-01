@@ -30,13 +30,13 @@ module Mail2FrontMatter
         if Parser::ALLOWED_TYPES.keys.include?(attachment.main_type)
 
           # save attachments
-          media_directory = File.join(Dir.pwd, 'source', Parser::ALLOWED_TYPES[attachment.main_type])
-          FileUtils.mkdir_p(media_directory)
+          media_type_directory = File.join(Mail2FrontMatter.config[:media_directory], Parser::ALLOWED_TYPES[attachment.main_type])
+          FileUtils.mkdir_p(media_type_directory)
 
-          filepath = File.join(media_directory, attachment.filename) 
+          filepath = File.join(media_type_directory, attachment.filename) 
 
           # save attachment
-          File.open(filepath, "w+b", 0644) {|f| f.write attachment.body.decoded}
+          File.open(filepath, "w+b", 0644) { |f| f.write attachment.body.decoded }
 
           # retain metadata
           attachments[attachment.cid] = {
