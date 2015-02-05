@@ -60,7 +60,7 @@ module Mail2FrontMatter
       })
 
       # push
-      # repo.push 'origin', ['refs/heads/master']
+      repo.push 'origin', ['refs/heads/master']
 
       # return sha
       repo.references["refs/heads/master"].target_id

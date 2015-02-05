@@ -8,9 +8,21 @@ require File.join(M2FM_GEM_PATH, 'lib', 'mail2frontmatter')
 
 RSpec.configure do |config|
   config.before(:suite) do
-    repo = Rugged::Repository.init_at(File.join(M2FM_GEM_PATH, 'spec', 'installation', '.git'))
+
+    # remove any data hanging around from failed runs...
+    FileUtils.rm_rf(Dir[File.join(M2FM_GEM_PATH, 'spec', 'installation', 'data', '*')])
+    FileUtils.rm_rf(Dir[File.join(M2FM_GEM_PATH, 'spec', 'installation', 'media', '*')])
+
+    # setup a repo in spec/installation
+    repo   = Rugged::Repository.init_at(File.join(M2FM_GEM_PATH, 'spec', 'installation', '.git'))
+    remote = Rugged::Repository.init_at(File.join(M2FM_GEM_PATH, 'spec', 'remote'), :bare)
+
+    # add the remote as origin
+    repo.remotes.create('origin', File.join(M2FM_GEM_PATH, 'spec', 'remote'))
+
     index = repo.index
 
+    # stage the blank folders
     index.add({
       path: 'data/.gitkeep', 
       oid: (Rugged::Blob.from_workdir repo, 'data/.gitkeep'),
@@ -23,7 +35,7 @@ RSpec.configure do |config|
       mode: 0100644
     })
 
-    # commit
+    # commit them
     tree = index.write_tree(repo)
     index.write
 
@@ -42,11 +54,13 @@ RSpec.configure do |config|
       update_ref: 'HEAD'
     })
 
-    FileUtils.rm_rf(Dir[File.join(M2FM_GEM_PATH, 'spec', 'installation', 'data', '*')])
-    FileUtils.rm_rf(Dir[File.join(M2FM_GEM_PATH, 'spec', 'installation', 'media', '*')])
+    # push
+    repo.push 'origin', ['refs/heads/master']
   end
 
   config.after(:suite) do
+    # clean up and destroy git repo...
+    FileUtils.rm_rf(Dir[File.join(M2FM_GEM_PATH, 'spec', 'remote', '*')])
     FileUtils.rm_rf(Dir[File.join(M2FM_GEM_PATH, 'spec', 'installation', 'data', '*')])
     FileUtils.rm_rf(Dir[File.join(M2FM_GEM_PATH, 'spec', 'installation', 'media', '*')])
     FileUtils.rm_rf(Dir[File.join(M2FM_GEM_PATH, 'spec', 'installation', '.git')])
