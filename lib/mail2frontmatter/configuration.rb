@@ -47,6 +47,10 @@ module Mail2FrontMatter
         @logger = Logger.new(STDOUT)
       end
 
+      @config[:git] ||= {
+        path:  Dir.pwd
+      }
+
       # set default for data directory unless already specified
       # the data directory is where the posts will be written to
       unless @config[:data_directory]

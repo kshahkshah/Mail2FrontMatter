@@ -23,10 +23,11 @@ module Mail2FrontMatter
 
       # make a sensible standard blog filename unless one is given
       metadata[:filename] ||= [metadata[:received].strftime("%Y-%m-%d"), '-', metadata[:subject].parameterize, '.html.erb'].join
+      metadata[:filepath] ||= File.join(Mail2FrontMatter.config[:data_directory], metadata[:filename])
 
       data = metadata.to_yaml + "---\n" + body
 
-      File.write(File.join(Mail2FrontMatter.config[:data_directory], metadata[:filename]), data)
+      File.write(metadata[:filepath], data)
     end
 
   end
