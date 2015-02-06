@@ -6,12 +6,20 @@ require 'yaml'
 require 'fileutils'
 require File.join(M2FM_GEM_PATH, 'lib', 'mail2frontmatter')
 
+module RSpec
+  # remove any data hanging around from spec runs...
+  def self.clean_testbed
+    FileUtils.rm_rf(Dir[File.join(M2FM_GEM_PATH, 'spec', 'remote', '*')])
+    FileUtils.rm_rf(Dir[File.join(M2FM_GEM_PATH, 'spec', 'installation', 'data', '*')])
+    FileUtils.rm_rf(Dir[File.join(M2FM_GEM_PATH, 'spec', 'installation', 'media', '*')])
+    FileUtils.rm_rf(Dir[File.join(M2FM_GEM_PATH, 'spec', 'installation', '.git')])
+  end
+end
+
 RSpec.configure do |config|
   config.before(:suite) do
 
-    # remove any data hanging around from failed runs...
-    FileUtils.rm_rf(Dir[File.join(M2FM_GEM_PATH, 'spec', 'installation', 'data', '*')])
-    FileUtils.rm_rf(Dir[File.join(M2FM_GEM_PATH, 'spec', 'installation', 'media', '*')])
+    RSpec.clean_testbed
 
     # setup a repo in spec/installation
     repo   = Rugged::Repository.init_at(File.join(M2FM_GEM_PATH, 'spec', 'installation', '.git'))
@@ -59,10 +67,6 @@ RSpec.configure do |config|
   end
 
   config.after(:suite) do
-    # clean up and destroy git repo...
-    FileUtils.rm_rf(Dir[File.join(M2FM_GEM_PATH, 'spec', 'remote', '*')])
-    FileUtils.rm_rf(Dir[File.join(M2FM_GEM_PATH, 'spec', 'installation', 'data', '*')])
-    FileUtils.rm_rf(Dir[File.join(M2FM_GEM_PATH, 'spec', 'installation', 'media', '*')])
-    FileUtils.rm_rf(Dir[File.join(M2FM_GEM_PATH, 'spec', 'installation', '.git')])
+    RSpec.clean_testbed
   end
 end

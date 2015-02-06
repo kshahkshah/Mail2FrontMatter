@@ -4,7 +4,7 @@
 
 Email-to-blog parser which creates YAML FrontMatter and saves your attachments.
 
-Designed to be used with either Middleman or Jekyll
+Designed to be used with either Middleman or Jekyll.
 
 ## Installation
 

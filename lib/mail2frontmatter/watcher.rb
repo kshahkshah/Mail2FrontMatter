@@ -18,9 +18,11 @@ module Mail2FrontMatter
       Mailman.config.send("#{mail_protocol}=", Mail2FrontMatter.config[:mailman])
       Mailman.config.logger = Mail2FrontMatter.logger
 
+      Mail2FrontMatter.logger.info("Mail2FrontMatter v#{Mail2FrontMatter::VERSION} is starting ...")
+
       Mailman::Application.run do
         from(@senders).to(@receiver) do
-          logger = Mailman.config.logger
+          logger = Mail2FrontMatter.logger
 
           logger.info('parsing message...')
           parser = Mail2FrontMatter::Parser.new(message)
@@ -30,6 +32,11 @@ module Mail2FrontMatter
 
           logger.info('saving processed post...')
           Mail2FrontMatter::Writer.write(metadata, body)
+
+          logger.info('commiting written post and attachments...')
+          Mail2FrontMatter::Committer.commit(metadata, body)
+
+          logger.info('done...')
         end
       end
     end

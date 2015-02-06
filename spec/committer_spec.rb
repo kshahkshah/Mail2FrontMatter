@@ -1,12 +1,10 @@
 require 'spec_helper'
-require 'byebug'
 
 describe Mail2FrontMatter::Committer, "committing" do
   require 'rugged'
 
   let(:config) { File.join(M2FM_GEM_PATH, 'fixtures', 'mail2frontmatter.simple.yml') }
   let(:message_one) { Mail::Message.new(File.read(File.join(M2FM_GEM_PATH, 'fixtures', 'attachments.eml'))) }
-  let(:blog_post) { Mail::Message.new(File.read(File.join(M2FM_GEM_PATH, 'fixtures', 'blog-post.yml'))) }
 
   it "should commit new posts" do
     Mail2FrontMatter.set_config(config) do |config|
