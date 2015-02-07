@@ -53,7 +53,13 @@ module Mail2FrontMatter
                                   update_ref: 'HEAD')
 
       # push
-      repo.push 'origin', ['refs/heads/master']
+      begin
+        credentials = Rugged::Credentials::SshKeyFromAgent.new(username: 'git')
+        repo.push 'origin', ['refs/heads/master'], { credentials: credentials }
+      rescue StandardError => e
+        Mail2FrontMatter.logger.info("Could not push!")
+        Mail2FrontMatter.logger.error(e)
+      end
 
       # return sha
       repo.references['refs/heads/master'].target_id
