@@ -13,34 +13,34 @@ options = {
 }
 
 OptionParser.new do |opts|
-  opts.banner = "Usage: mail2frontmatter [options]"
+  opts.banner = 'Usage: mail2frontmatter [options]'
 
-  opts.on("-k", "--stop", "stop the running process if any") do
+  opts.on('-k', '--stop', 'stop the running process if any') do
     stop = true
   end
 
-  opts.on("-cCONFIG", "--config=CONFIG", "path to configuration file, defaults to ./data/mail2frontmatter.yml") do |config_file|
+  opts.on('-cCONFIG', '--config=CONFIG', 'path to configuration file, defaults to ./data/mail2frontmatter.yml') do |config_file|
     config = config_file
   end
 
-  opts.on("-d", "--detach", "detach process and run in the background") do
+  opts.on('-d', '--detach', 'detach process and run in the background') do
     options[:background] = true
   end
 
-  opts.on("-lLOGFILE", "--log=LOGFILE", "path to log file, defaults to STDOUT in the foreground or ./log/mail2frontmatter.log when daemonized") do |log_file|
+  opts.on('-lLOGFILE', '--log=LOGFILE', 'path to log file, defaults to STDOUT in the foreground or ./log/mail2frontmatter.log when daemonized') do |log_file|
     config[:log_file] = log_file
   end
 
-  opts.on("-pPIDFILE", "--pid=PIDFILE", "path to pid file, defaults to ./tmp/pids/mail2frontmatter.pid") do |pid_file|
+  opts.on('-pPIDFILE', '--pid=PIDFILE', 'path to pid file, defaults to ./tmp/pids/mail2frontmatter.pid') do |pid_file|
     options[:pid_file] = pid_file
   end
 
-  opts.on("-h", "--help", "Prints this help") do
+  opts.on('-h', '--help', 'Prints this help') do
     puts opts
     exit
   end
 
-  opts.on_tail("-v", "--version", "Prints version") do
+  opts.on_tail('-v', '--version', 'Prints version') do
     require File.join(File.dirname(__FILE__), '..', 'lib', 'mail2frontmatter', 'version')
     puts Mail2FrontMatter::VERSION
     exit
@@ -50,8 +50,8 @@ end.parse!
 # TRY TO KILL
 if stop
 
-  if !File.exist?(options[:pid_file])
-    puts "no pidfile! are you sure mail2frontmatter is running?"
+  unless File.exist?(options[:pid_file])
+    puts 'no pidfile! are you sure mail2frontmatter is running?'
     exit 1
   end
 
@@ -63,13 +63,13 @@ if stop
     Process.kill('TERM', pid)
     exit 0
 
-    # FUTURE: library intercepts TERM, 
-    # waits to finish processing if it is
-    # or if kill exits dirty.
+  # FUTURE: library intercepts TERM,
+  # waits to finish processing if it is
+  # or if kill exits dirty.
 
   # CATCH STALE PID
   rescue Errno::ESRCH
-    puts "stale pidfile... cleaning"
+    puts 'stale pidfile... cleaning'
 
     # also exit here! but don't move exit 0 to ensure block
     # because "in the future" we may intelligently intercept pkill above
@@ -90,7 +90,7 @@ require File.join(File.dirname(__FILE__), '..', 'lib', 'mail2frontmatter')
 if options[:background]
 
   # CHECKING ALREADY RUNNING / CHECK STALE
-  if File.exists?(options[:pid_file])
+  if File.exist?(options[:pid_file])
     pid = File.read(options[:pid_file]).to_i
 
     begin
@@ -99,12 +99,12 @@ if options[:background]
       exit 1
 
     rescue Errno::ESRCH
-      puts "stale pidfile... cleaning"
+      puts 'stale pidfile... cleaning'
       File.delete(options[:pid_file])
     end
   end
 
-  puts "daemonizing..."
+  puts 'daemonizing...'
 
   # SET CONFIG...
   Mail2FrontMatter.set_config(config)

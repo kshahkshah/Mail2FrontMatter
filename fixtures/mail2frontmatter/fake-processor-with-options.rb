@@ -1,7 +1,7 @@
 module Mail2FrontMatter
   class FakeProcessorWithOptions < PreProcessor
     def self.run(metadata, body)
-      return metadata, body
+      [metadata, body]
     end
   end
 end

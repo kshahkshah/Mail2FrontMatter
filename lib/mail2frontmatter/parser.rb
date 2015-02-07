@@ -8,19 +8,19 @@ module Mail2FrontMatter
     attr_accessor :message, :metadata, :body
 
     ALLOWED_TYPES = {
-      "audio" => "audio",
-      "video" => "videos", 
-      "image" => "images"
+      'audio' => 'audio',
+      'video' => 'videos',
+      'image' => 'images'
     }
 
     def initialize(message)
       @message = message
       raw_parsed_html = Nokogiri::HTML.parse(@message.html_part.decoded.strip)
 
-      @body = raw_parsed_html.at("body")
+      @body = raw_parsed_html.at('body')
 
       # remove extraneous nesting
-      while(@body.children.count == 1 && @body.children.first.name == "div") do
+      while @body.children.count == 1 && @body.children.first.name == 'div'
         @body = @body.children.first
       end
 
@@ -33,10 +33,10 @@ module Mail2FrontMatter
           media_type_directory = File.join(Mail2FrontMatter.config[:media_directory], Parser::ALLOWED_TYPES[attachment.main_type])
           FileUtils.mkdir_p(media_type_directory)
 
-          filepath = File.join(media_type_directory, attachment.filename) 
+          filepath = File.join(media_type_directory, attachment.filename)
 
           # save attachment
-          File.open(filepath, "w+b", 0644) { |f| f.write attachment.body.decoded }
+          File.open(filepath, 'w+b', 0644) { |f| f.write attachment.body.decoded }
 
           # retain metadata
           attachments[attachment.cid] = {
@@ -67,7 +67,6 @@ module Mail2FrontMatter
         subject:     message.subject,
         attachments: attachments
       }
-
     end
   end
 end

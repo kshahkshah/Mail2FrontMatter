@@ -4,7 +4,6 @@ module Mail2FrontMatter
   require 'mailman'
 
   class Watcher
-
     def self.run
       mail_protocol = Mail2FrontMatter.config[:protocol] || :imap
       poll_interval = Mail2FrontMatter.config[:interval] || 60
@@ -40,6 +39,5 @@ module Mail2FrontMatter
         end
       end
     end
-
   end
 end

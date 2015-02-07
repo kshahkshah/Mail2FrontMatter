@@ -3,15 +3,11 @@ module Mail2FrontMatter
   require 'active_support/inflector'
 
   class << self
-    def logger
-      @logger
-    end
+    attr_reader :logger
 
-    def config
-      @config
-    end
+    attr_reader :config
 
-    def set_config(passed_config = nil, &block)
+    def set_config(passed_config = nil, &_block)
       # load config from file
       if passed_config.is_a?(String)
         @config = YAML.load_file(passed_config).deep_symbolize_keys!
@@ -24,14 +20,14 @@ module Mail2FrontMatter
         if File.exist?(default_config)
           @config = YAML.load_file(default_config).deep_symbolize_keys!
         else
-          raise LoadError, 'no configuration given or found at ./data/mail2frontmatter.yml'
+          fail LoadError, 'no configuration given or found at ./data/mail2frontmatter.yml'
         end
 
       elsif passed_config.is_a?(Hash)
         @config = passed_config
 
       else
-        raise ArgumentError, 'not a valid configuration type'
+        fail ArgumentError, 'not a valid configuration type'
       end
 
       # setup logger, use provided location
@@ -87,9 +83,8 @@ module Mail2FrontMatter
           raise e
         end
 
-        klass = "Mail2FrontMatter::#{processor[:key].underscore.camelize}".constantize.register(processor[:options] || {})
+        "Mail2FrontMatter::#{processor[:key].underscore.camelize}".constantize.register(processor[:options] || {})
       end
-
     end
   end
 end

@@ -1,11 +1,10 @@
 require 'spec_helper'
 
-describe Mail2FrontMatter::Writer, "writing" do
-
+describe Mail2FrontMatter::Writer, 'writing' do
   let(:config) { File.join(M2FM_GEM_PATH, 'fixtures', 'mail2frontmatter.simple.yml') }
   let(:message_one) { Mail::Message.new(File.read(File.join(M2FM_GEM_PATH, 'fixtures', 'attachments.eml'))) }
 
-  it "should write a parse and processed email" do
+  it 'should write a parse and processed email' do
     Mail2FrontMatter.set_config(config) do |config|
       config[:data_directory]  = File.join(M2FM_GEM_PATH, 'spec', 'installation', 'data')
       config[:media_directory] = File.join(M2FM_GEM_PATH, 'spec', 'installation', 'media')
@@ -19,5 +18,4 @@ describe Mail2FrontMatter::Writer, "writing" do
     expect(File.exist?(File.join(Mail2FrontMatter.config[:data_directory], '2009-11-25-295-abandoned-elevator-shaft.html.erb'))).to be(true)
     expect(File.exist?(File.join(Mail2FrontMatter.config[:media_directory], 'images', 'IMG_0141.JPG'))).to be(true)
   end
-
 end

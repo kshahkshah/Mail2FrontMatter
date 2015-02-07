@@ -5,7 +5,7 @@ module Mail2FrontMatter
   class PreProcessor
     require 'set'
 
-    class InvalidProcessor < StandardError ; end
+    class InvalidProcessor < StandardError; end
 
     @@processors = Set.new
 
@@ -14,8 +14,8 @@ module Mail2FrontMatter
     end
 
     def self.register(options = {})
-      raise InvalidProcessor, "run method not defined on #{self}" if !self.respond_to?(:run)
-      raise ArgumentError, "options must be a hash" unless options.is_a? Hash
+      fail InvalidProcessor, "run method not defined on #{self}" unless self.respond_to?(:run)
+      fail ArgumentError, 'options must be a hash' unless options.is_a? Hash
       @options = options
 
       @@processors << self
@@ -26,13 +26,12 @@ module Mail2FrontMatter
         begin
           metadata, body = processor.run(metadata, body)
         rescue StandardError => e
-          Mail2FrontMatter.logger.error("processor failed!")
+          Mail2FrontMatter.logger.error('processor failed!')
           Mail2FrontMatter.logger.error(e)
         end
       end
 
-      return metadata, body
+      [metadata, body]
     end
-
   end
 end

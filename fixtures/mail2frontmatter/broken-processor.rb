@@ -1,8 +1,8 @@
 module Mail2FrontMatter
   class BrokenProcessor < PreProcessor
     def self.run(metadata, body)
-      raise NoMethodError, "because this is a test"
-      return metadata, body
+      fail NoMethodError, 'because this is a test'
+      [metadata, body]
     end
   end
 end
