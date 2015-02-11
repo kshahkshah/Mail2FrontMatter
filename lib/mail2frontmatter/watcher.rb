@@ -20,6 +20,7 @@ module Mail2FrontMatter
       Mail2FrontMatter.logger.info("Mail2FrontMatter v#{Mail2FrontMatter::VERSION} is starting ...")
 
       Mailman::Application.run do
+        require 'rbtrace'
         from(@senders).to(@receiver) do
           logger = Mail2FrontMatter.logger
 

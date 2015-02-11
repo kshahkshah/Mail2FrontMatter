@@ -22,6 +22,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'nokogiri', '~> 1.6'
   spec.add_dependency 'activesupport', '~> 4'
   spec.add_dependency 'rugged', '~> 0.21'
+  spec.add_dependency 'rbtrace'
 
   spec.add_development_dependency 'rspec', '~> 3.1'
   spec.add_development_dependency 'byebug', '~> 3.5' unless RUBY_VERSION =~ /1.9/
