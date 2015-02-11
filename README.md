@@ -6,6 +6,8 @@ Email-to-blog parser which creates YAML FrontMatter and saves your attachments.
 
 Designed to be used with either Middleman or Jekyll.
 
+This project is actively being developed. I wrap the executable with the [eye](https://github.com/kostya/eye) gem at the moment.
+
 ## Installation
 
 Install it yourself as:
@@ -147,6 +149,27 @@ You should always always return metadata and body as shown since this will be pa
 
 ### TODO
 
-* White list sanitization by default
-* defaults for Jekyll out of the box
+* core plugins
+
+Core plugins should be included out of the box and disabled upon request. It's just simpler to use
+
+* zero config for Jekyll
+
+current we 'detect' the directory structure to see if the executable is run from Middleman, 
+do the same for Jekyll in order to support it out of the box with zero configuration
+
+* remove dependency on Mailman, use Mail directly
+
+no need to use Mailman if I intend to manage the process myself. Use Mail directly
+
+* detach runner
+
+incoming mail checks in the main thread, processing, writing, commiting should be handled in a separate process to discard leaks
+
+
+
+
+
+
+
 
