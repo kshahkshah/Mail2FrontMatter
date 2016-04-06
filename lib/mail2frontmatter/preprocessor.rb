@@ -1,4 +1,3 @@
-
 # Pre-processes blog data, allows hooks
 
 module Mail2FrontMatter
