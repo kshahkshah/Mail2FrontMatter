@@ -37,6 +37,10 @@ module Mail2FrontMatter
 
           logger.info('done...')
         end
+
+        default do
+          logger.error("received and discarded email from unknown address!")
+        end
       end
     end
   end
