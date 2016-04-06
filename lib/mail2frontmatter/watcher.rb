@@ -8,9 +8,6 @@ module Mail2FrontMatter
       mail_protocol = Mail2FrontMatter.config[:protocol] || :imap
       poll_interval = Mail2FrontMatter.config[:interval] || 60
 
-      # @receiver =
-      # @senders  =
-
       Mailman.config.poll_interval = poll_interval
       Mailman.config.ignore_stdin = true
 
@@ -18,12 +15,11 @@ module Mail2FrontMatter
       Mailman.config.logger = Mail2FrontMatter.logger
 
       Mail2FrontMatter.logger.info("Mail2FrontMatter v#{Mail2FrontMatter::VERSION} is starting...")
-      # Mail2FrontMatter.logger.info("monitoring #{@receiver} for messages by #{@senders}...")
 
       Mailman::Application.run do
-        from(Mail2FrontMatter.config[:senders]).to(Mail2FrontMatter.config[:receiver]) do
-          logger = Mail2FrontMatter.logger
+        logger = Mail2FrontMatter.logger
 
+        from(Mail2FrontMatter.config[:senders]).to(Mail2FrontMatter.config[:receiver]) do
           logger.info('parsing message...')
           parser = Mail2FrontMatter::Parser.new(message)
 
