@@ -18,7 +18,7 @@ module Mail2FrontMatter
       Mailman.config.logger = Mail2FrontMatter.logger
 
       Mail2FrontMatter.logger.info("Mail2FrontMatter v#{Mail2FrontMatter::VERSION} is starting...")
-      Mail2FrontMatter.logger.info("monitoring #{@receiver} for messages by #{@senders.join(', ')}...")
+      Mail2FrontMatter.logger.info("monitoring #{@receiver} for messages by #{@senders}...")
 
       Mailman::Application.run do
         from(@senders).to(@receiver) do
